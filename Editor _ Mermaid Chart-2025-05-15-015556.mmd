@@ -1,0 +1,53 @@
+---
+config:
+  theme: neo
+  look: neo
+  layout: dagre
+---
+classDiagram
+direction BT
+    class Doctor {
+	    - idDoctor: String
+	    - nombre: String
+	    - especialidad: String
+	    - horarioDisponible: List~String~
+	    + agregarDisponibilidad(hora: String)
+	    + eliminarDisponibilidad(hora: String)
+    }
+    class Paciente {
+	    - idPaciente: String
+	    - nombre: String
+	    - historialCitas: List~Cita~
+	    + solicitarCita(doctor: Doctor, fecha: String)
+	    + cancelarCita(idCita: String)
+    }
+    class Cita {
+	    - idCita: String
+	    - fecha: String
+	    - hora: String
+	    - estado: String
+	    + confirmarCita()
+	    + cancelarCita()
+    }
+    class Recepcionista {
+	    - idRecepcionista: String
+	    - nombre: String
+	    + registrarCita(cita: Cita)
+	    + gestionarCita(idCita: String)
+    }
+    class Hospital {
+	    - nombre: String
+	    - direccion: String
+	    - listaDoctores: List~Doctor~
+	    - listaPacientes: List~Paciente~
+	    + agendarCita(cita: Cita)
+	    + cancelarCita(idCita: String)
+	    + listarCitas()
+    }
+    
+    Hospital "1" *-- "1" Doctor
+    Hospital "1" <-- "1" Paciente
+    Paciente "1" --* "1" Cita
+    Doctor "1" --* "1" Cita
+    Recepcionista "1" ..> "1" Cita
+    Hospital *-- Recepcionista
